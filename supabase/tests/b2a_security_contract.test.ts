@@ -20,6 +20,13 @@ describe('B2a migration security contract', () => {
     expect(sql).toMatch(/create function public\.enroll_participant.+security definer.+auth\.uid\(\).+join_code.+is_active/is)
     expect(sql).toMatch(/revoke insert on table public\.participant_sessions from [^;]*authenticated/i)
   })
+  it('rejects blank contributions and reserves workshop creation for a protected flow', () => {
+    expect(sql).toMatch(/content text not null check \(char_length\(content\) between 1 and 1000 and btrim\(content\) <> ''\)/i)
+    expect(sql).toMatch(/contributions_create.+status = 'pending'.+participant_session_id.+workshop_id = contributions\.workshop_id/i)
+    expect(sql).toMatch(/create function public\.create_workshop.+is_anonymous.+raise exception/is)
+    expect(sql).toMatch(/revoke execute on function public\.create_workshop\(text,text\) from anon, authenticated/i)
+    expect(sql).not.toMatch(/grant execute on function [^;]*create_workshop[^;]* to authenticated/i)
+  })
   it('separates owner membership authority from organizer access', () => {
     expect(sql).not.toContain('memberships_organize')
     expect(sql).toMatch(/is_workshop_owner.+revoke insert, update, delete on table public\.workshop_memberships/is)

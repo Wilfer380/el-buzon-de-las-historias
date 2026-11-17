@@ -31,5 +31,45 @@ aside p { margin-bottom: 0; }
 .panel h1 { font-size: clamp(2.2rem, 6vw, 4rem); }
 .panel > p:not(.eyebrow) { line-height: 1.65; }
 .identifier { padding: .7rem; border-radius: .5rem; background: #efedff; }
-@media (max-width: 700px) { .hero { grid-template-columns: 1fr; padding-top: 2rem; } header { align-items: flex-start; flex-direction: column; } nav .action { width: 100%; justify-content: center; } }
+.route-contract { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.participant-shell { width: min(70rem, 100%); margin: auto; padding: 1rem; }
+.participant-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(18rem, .8fr); gap: 1rem; align-items: start; }
+.participant-card { padding: clamp(1rem, 4vw, 2rem); border: 1px solid #d9d8ed; border-radius: 1rem; background: var(--white); box-shadow: 0 .5rem 2rem rgb(16 42 86 / 8%); }
+.participant-card h1 { font-size: clamp(2rem, 7vw, 3.5rem); }
+.participant-card label, .participant-card legend { display: block; margin: 1rem 0 .4rem; font-weight: 750; }
+.participant-card input, .participant-card textarea { width: 100%; margin-top: .4rem; padding: .8rem; border: 2px solid #aaa4cc; border-radius: .5rem; font: inherit; }
+.participant-card textarea { min-height: 9rem; resize: vertical; }
+.participant-card button { min-height: 44px; cursor: pointer; }
+.participant-card button:disabled { cursor: not-allowed; opacity: .55; }
+fieldset { margin: 1rem 0; padding: 0; border: 0; }
+.category-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: .5rem; }
+.category-list button { padding: .7rem; border: 2px solid var(--purple); border-radius: .7rem; color: var(--blue); background: white; font-weight: 700; }
+.category-list button.selected { color: white; background: var(--purple); }
+.counter { margin-top: -.2rem; text-align: right; }
+.stage, .error, .review, .mural article { padding: .8rem; border-radius: .6rem; }
+.stage { background: #e1f7f5; }
+.error { color: #7b1721; background: #ffe9eb; }
+.review, .mural article { margin-block: .75rem; background: #f0effb; overflow-wrap: anywhere; }
+.participant-card aside { margin-top: 1.5rem; border-top-width: 1px; box-shadow: none; }
+.connection { padding: .65rem 1rem; border-radius: .6rem; font-weight: 750; }
+.connection.active { color: #075e59; background: #dff7f3; }
+.connection.error { color: #7b1721; background: #ffe9eb; }
+.admin-login { max-width: 38rem; margin: 8vh auto; }
+.admin-shell .participant-card h1 { font-size: clamp(2rem, 5vw, 4rem); }
+.moderation-list { display: grid; gap: 1rem; }
+.moderation-item { padding: 1rem; border: 2px solid #d9d8ed; border-radius: .8rem; }
+.moderation-item.approved { border-color: var(--turquoise); }
+.moderation-item.rejected { opacity: .7; }
+.moderation-actions { display: flex; gap: .75rem; margin-top: 1rem; }
+.action.approve { background: #087b77; border-color: #087b77; }
+.action.reject { color: #7b1721; background: white; border-color: #7b1721; }
+.projection-shell { width: min(100vw, 177.78vh); min-height: min(100vh, 56.25vw); margin: auto; padding: clamp(1rem, 3vw, 3rem); color: white; background: linear-gradient(135deg, #102a56, #554b91); }
+.projection-shell header { align-items: flex-start; }
+.projection-shell h1 { max-width: none; font-size: clamp(2.4rem, 5vw, 5rem); }
+.projection-shell .eyebrow { color: #8de1dc; }
+.projection-summary { display: flex; justify-content: space-between; gap: 1rem; margin: 1rem 0 2rem; padding: 1rem; border-radius: .8rem; color: var(--blue); background: var(--yellow); font-size: clamp(1rem, 2vw, 1.5rem); }
+.projection-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(.8rem, 2vw, 1.5rem); }
+.projection-grid article, .projection-empty { min-height: 10rem; padding: clamp(1rem, 2vw, 2rem); border-radius: 1rem; color: var(--blue); background: white; box-shadow: 0 1rem 2rem rgb(0 0 0 / 18%); }
+.projection-grid blockquote { margin: .5rem 0 1rem; font-size: clamp(1.2rem, 2.4vw, 2rem); line-height: 1.25; overflow-wrap: anywhere; }
+@media (max-width: 700px) { .hero, .participant-grid, .projection-grid { grid-template-columns: 1fr; padding-top: 2rem; } header { align-items: flex-start; flex-direction: column; } nav .action, .participant-card > .action { width: 100%; justify-content: center; } .projection-summary { flex-direction: column; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; } }

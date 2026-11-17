@@ -6,7 +6,7 @@ describe('stable workshop domain boundaries', () => {
     expect(workshopStages).toEqual(['lobby', 'icebreaker', 'contributions', 'poll', 'story', 'complete'])
   })
   it('publishes moderated contribution boundaries', () => {
-    expect(contributionCategories).toEqual(['word', 'phrase', 'idea'])
+    expect(contributionCategories).toEqual(['experience', 'difficulty', 'hope', 'idea'])
     expect(contributionStatuses).toEqual(['pending', 'approved', 'rejected'])
   })
 })

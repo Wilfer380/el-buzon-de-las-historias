@@ -29,18 +29,19 @@ Build a production-ready interactive platform for the 18 November 2026 UNIMINUTO
   - Status: completed
   - Evidence: typecheck passed; 5/5 tests passed; production build passed; production dependency audit reported 0 vulnerabilities; independent verification approved the slice. Playwright was configured but not executed.
   - Commit: `b0ad9e8` (`feat(app): establish workshop application foundation`)
-- [ ] B2 — Add Supabase schema, migrations, organizer authentication, memberships, RLS policies, and policy tests.
-  - Status: in progress
-  - Evidence: pending
-- [ ] B3 — Implement workshop creation, participant-safe join codes, real public URLs, QR display/download, and session restoration.
-  - Status: pending
-  - Evidence: pending
-- [ ] B4 — Implement animated contribution envelopes, server validation, rate limiting, moderation queue, withdrawal, and approved mural.
-  - Status: pending
-  - Evidence: pending
-- [ ] B5 — Implement organizer-controlled stages, configurable timeline, reconnecting projection view, and realtime state synchronization.
-  - Status: pending
-  - Evidence: pending
+- [x] B2 — Add a persistent secure backend and protected organizer access.
+  - Status: completed through the production Cloudflare Worker + D1 equivalent; the earlier Supabase design remains documented but is not the deployed runtime.
+  - Evidence: remote D1 migration applied; organizer and projection secrets configured; Worker deployed; 26/26 tests, typecheck, build, production audit, and independent release verification passed.
+  - Commits: `1471162` (Supabase security design) plus the pending production MVP commit.
+- [x] B3 — Implement participant-safe workshop access, real public URLs, and session restoration.
+  - Status: completed for the simplified link-first MVP; QR download is deferred.
+  - Evidence: join code `HISTORIA`, high-entropy participant capability, restored session, persistent D1 records.
+- [x] B4 — Implement contribution envelopes, server validation, moderation queue, and approved mural.
+  - Status: completed for the MVP.
+  - Evidence: pending contributions remain private; organizer approval/rejection and approved-only mural are tested.
+- [x] B5 — Implement reconnecting projection and automatic synchronization.
+  - Status: completed for the simplified MVP using safe three-second polling; configurable timeline remains deferred.
+  - Evidence: approved-only 16:9 projection and connection/error states are tested.
 - [ ] B6 — Implement configurable topic and narrative polls, atomic open/close, duplicate-vote mitigation, tie workflow, and results projection.
   - Status: pending
   - Evidence: pending

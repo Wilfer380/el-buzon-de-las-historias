@@ -1,6 +1,6 @@
 create extension if not exists pgcrypto;
 create type workshop_stage as enum ('lobby','icebreaker','contributions','poll','story','complete');
-create type contribution_category as enum ('word','phrase','idea');
+create type contribution_category as enum ('experience','difficulty','hope','idea');
 create type moderation_status as enum ('pending','approved','rejected');
 create type poll_status as enum ('draft','open','closed');
 create type moderation_action as enum ('approve','reject','restore','note');
@@ -33,7 +33,7 @@ create table public.participant_sessions (
 create table public.contributions (
   id uuid primary key default gen_random_uuid(), workshop_id uuid not null references public.workshops on delete cascade,
   participant_session_id uuid not null, category contribution_category not null,
-  content text not null check (char_length(content) between 1 and 1000), status moderation_status not null default 'pending',
+  content text not null check (char_length(content) between 1 and 1000 and btrim(content) <> ''), status moderation_status not null default 'pending',
   created_at timestamptz not null default now(), updated_at timestamptz not null default now(), unique (id,workshop_id),
   foreign key (participant_session_id,workshop_id) references public.participant_sessions (id,workshop_id) on delete cascade
 );
@@ -108,6 +108,7 @@ create index contributions_workshop_status_idx on public.contributions (workshop
 create index proposals_workshop_status_idx on public.story_fragment_proposals (workshop_id,status,created_at);
 create index moderation_target_idx on public.moderation_records (target_table,target_id);
 create index audit_workshop_created_idx on public.audit_records (workshop_id,created_at desc);
+alter publication supabase_realtime add table public.workshops, public.contributions;
 create trigger workshops_updated before update on public.workshops for each row execute function public.set_updated_at();
 create trigger contributions_updated before update on public.contributions for each row execute function public.set_updated_at();
 create trigger polls_updated before update on public.polls for each row execute function public.set_updated_at();
@@ -146,6 +147,7 @@ create function public.create_workshop(workshop_title text, workshop_join_code t
 declare created_id uuid;
 begin
   if auth.uid() is null then raise exception 'authentication required'; end if;
+  if coalesce((auth.jwt() ->> 'is_anonymous')::boolean,false) then raise exception 'anonymous workshop creation denied'; end if;
   insert into public.workshops (title,join_code) values (workshop_title,workshop_join_code) returning id into created_id;
   insert into public.workshop_memberships (workshop_id,user_id,role) values (created_id,auth.uid(),'owner'); return created_id;
 end $$;
@@ -153,7 +155,7 @@ create function public.enroll_participant(input_join_code text, participant_disp
 declare target_workshop uuid; session_id uuid;
 begin
   if auth.uid() is null then raise exception 'authentication required'; end if;
-  select id into target_workshop from public.workshops where join_code = upper(input_join_code) and is_active;
+  select id into target_workshop from public.workshops where join_code = upper(btrim(input_join_code)) and is_active;
   if target_workshop is null then raise exception 'active workshop not found'; end if;
   insert into public.participant_sessions (workshop_id,user_id,display_name) values (target_workshop,auth.uid(),participant_display_name)
   on conflict (workshop_id,user_id) do update set display_name = excluded.display_name,last_seen_at = now() returning id into session_id;
@@ -167,7 +169,8 @@ begin
 end $$;
 
 revoke all on function public.is_workshop_organizer(uuid), public.is_workshop_owner(uuid), public.is_workshop_participant(uuid), public.create_workshop(text,text), public.enroll_participant(text,text), public.publish_story_version(uuid,uuid) from public;
-grant execute on function public.is_workshop_organizer(uuid), public.is_workshop_owner(uuid), public.is_workshop_participant(uuid), public.create_workshop(text,text), public.enroll_participant(text,text), public.publish_story_version(uuid,uuid) to authenticated;
+grant execute on function public.is_workshop_organizer(uuid), public.is_workshop_owner(uuid), public.is_workshop_participant(uuid), public.enroll_participant(text,text), public.publish_story_version(uuid,uuid) to authenticated;
+revoke execute on function public.create_workshop(text,text) from anon, authenticated;
 revoke insert on table public.participant_sessions from anon, authenticated;
 revoke insert, update, delete on table public.workshop_memberships from anon, authenticated;
 revoke insert, update, delete on table public.story_publications from anon, authenticated;

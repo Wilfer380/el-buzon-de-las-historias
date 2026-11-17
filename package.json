@@ -5,10 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "typecheck": "tsc -b --pretty false",
+    "build": "tsc -b && vite build --base=/el-buzon-de-las-historias/",
+    "typecheck": "tsc -b --pretty false && tsc --ignoreConfig --noEmit --pretty false --target ES2022 --lib ES2022,DOM --module ESNext --moduleResolution Bundler --strict --skipLibCheck worker/index.ts",
     "test": "vitest",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "worker:dev": "wrangler dev",
+    "worker:deploy": "wrangler deploy",
+    "db:migrate": "wrangler d1 migrations apply el-buzon-historias --remote"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.119.0",
@@ -28,6 +31,7 @@
     "jsdom": "latest",
     "typescript": "latest",
     "vite": "6.4.6",
-    "vitest": "3.2.7"
+    "vitest": "3.2.7",
+    "wrangler": "^4.164.0"
   }
 }

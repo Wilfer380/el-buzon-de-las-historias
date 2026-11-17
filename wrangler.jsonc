@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "el-buzon-de-las-historias-api",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-03-11",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "el-buzon-historias",
+      "database_id": "7282917e-0225-4e6a-9390-d9f1ae4fe562",
+      "migrations_dir": "worker/migrations"
+    }
+  ]
+}
