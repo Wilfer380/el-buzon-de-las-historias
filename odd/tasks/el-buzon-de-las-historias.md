@@ -32,7 +32,7 @@ Build a production-ready interactive platform for the 18 November 2026 UNIMINUTO
 - [x] B2 — Add a persistent secure backend and protected organizer access.
   - Status: completed through the production Cloudflare Worker + D1 equivalent; the earlier Supabase design remains documented but is not the deployed runtime.
   - Evidence: remote D1 migration applied; organizer and projection secrets configured; Worker deployed; 26/26 tests, typecheck, build, production audit, and independent release verification passed.
-  - Commits: `1471162` (Supabase security design) plus the pending production MVP commit.
+  - Commits: `1471162` (Supabase security design), `0b6d28a` (production MVP), and `3276330` (GitHub Pages routing).
 - [x] B3 — Implement participant-safe workshop access, real public URLs, and session restoration.
   - Status: completed for the simplified link-first MVP; QR download is deferred.
   - Evidence: join code `HISTORIA`, high-entropy participant capability, restored session, persistent D1 records.
@@ -60,6 +60,15 @@ Build a production-ready interactive platform for the 18 November 2026 UNIMINUTO
 
 ## Architecture decision
 Use a separate React + TypeScript + Vite repository with route-level participant, organizer, and projection experiences. Use Supabase PostgreSQL, Auth, Realtime, RLS, SQL functions, and narrowly scoped Edge Functions where privileged work is required. PostgreSQL remains authoritative; realtime events only notify clients to refetch authoritative state.
+
+## Deployment evidence
+- Participant: `https://wilfer380.github.io/el-buzon-de-las-historias/join/HISTORIA`
+- Organizer: `https://wilfer380.github.io/el-buzon-de-las-historias/admin/HISTORIA`
+- Projection: `https://wilfer380.github.io/el-buzon-de-las-historias/project/HISTORIA`
+- API: `https://el-buzon-de-las-historias-api.historias-que-nos-hacen-pensar.workers.dev`
+- GitHub Pages workflow `44176255157` passed.
+- Live Chrome checks passed for landing, participant, and organizer routes.
+- Live Worker checks passed for participant join, organizer login, and projection.
 
 ## Review workload
 This is a large multi-area product. Implement and verify one bounded work unit at a time. Each unit should remain independently reviewable; split further when an honest unit approaches 400 changed lines.
