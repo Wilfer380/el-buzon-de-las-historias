@@ -9,7 +9,7 @@ npm install
 npm run dev
 ```
 
-The B1 static shell needs no credentials. When Supabase integration begins, copy `config/env.example.txt` to `.env.local` and fill only the public URL and anonymous key. The Pi host safety layer prevents writing dot-environment files directly; never add a service-role key to browser configuration.
+The static shell needs no credentials. Backend actions fail with a configuration message until `config/env.example.txt` is copied to `.env.local` and its public URL and anonymous key are filled in. Never add a service-role key to browser configuration.
 
 ## Quality checks
 
@@ -23,4 +23,4 @@ Playwright is configured with one smoke test, but browser binaries are intention
 
 ## Current scope
 
-B1 provides landing, participant, organizer, and projection route shells. Supabase, realtime updates, QR codes, authentication, story submission, facilitation controls, and deployment are **not implemented**. See `docs/architecture.md` and `docs/workshop-flow.md`.
+B2a adds the initial PostgreSQL schema, RLS policy definitions, stable workshop domain types, and a lazy typed Supabase browser client. The migration has not been applied or verified against a Supabase runtime in this environment. Organizer UI, realtime updates, QR codes, authentication flows, story submission, facilitation controls, and deployment remain **not implemented**; organizer UI is B2b. See `docs/architecture.md` and `docs/workshop-flow.md`.
