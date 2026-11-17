@@ -28,7 +28,7 @@ Build a production-ready interactive platform for the 18 November 2026 UNIMINUTO
 - [x] B1 — Establish repository, route boundaries, design system, accessibility defaults, environment validation, test harness, CI, and architecture documentation.
   - Status: completed
   - Evidence: typecheck passed; 5/5 tests passed; production build passed; production dependency audit reported 0 vulnerabilities; independent verification approved the slice. Playwright was configured but not executed.
-  - Commit: pending local commit creation
+  - Commit: `b0ad9e8` (`feat(app): establish workshop application foundation`)
 - [ ] B2 — Add Supabase schema, migrations, organizer authentication, memberships, RLS policies, and policy tests.
   - Status: in progress
   - Evidence: pending
