@@ -22,7 +22,8 @@ export class WorkerParticipantRepository implements ParticipantRepository {
   constructor(private baseUrl: string = apiEnvironment.apiUrl, private fetcher: typeof fetch = fetch) {}
   private async request<T>(path: string, init: RequestInit = {}) {
     if (!this.baseUrl) throw new Error('Worker API is unavailable: VITE_API_URL is not configured')
-    const response = await this.fetcher(`${this.baseUrl}${path}`, { ...init, headers: { 'Content-Type': 'application/json', ...init.headers } })
+    const fetcher = this.fetcher
+    const response = await fetcher(`${this.baseUrl}${path}`, { ...init, headers: { 'Content-Type': 'application/json', ...init.headers } })
     const value = await response.json() as T & { error?: string }
     if (!response.ok) throw new Error(value.error ?? 'Worker API request failed')
     return value

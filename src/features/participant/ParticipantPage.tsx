@@ -20,9 +20,8 @@ const messageFor = (cause: unknown, fallback: string) => {
 
 export function ParticipantPage({ sessionCode, repository }: Props) {
   const [repo, setRepo] = useState(repository)
-  const [joining, setJoining] = useState(false)
+  const [joining, setJoining] = useState(true)
   const joinLock = useRef(false)
-  const [pseudonym, setPseudonym] = useState('')
   const [snapshot, setSnapshot] = useState<ParticipantSnapshot>()
   const [category, setCategory] = useState<ContributionCategory>()
   const [content, setContent] = useState('')
@@ -32,6 +31,8 @@ export function ParticipantPage({ sessionCode, repository }: Props) {
   const reloadVersion = useRef(0)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
+
+  useEffect(() => { void join() }, [sessionCode])
 
   useEffect(() => {
     if (!snapshot || !repo) return
@@ -51,7 +52,7 @@ export function ParticipantPage({ sessionCode, repository }: Props) {
     try {
       const activeRepo = repo ?? createParticipantRepository()
       setRepo(activeRepo)
-      setSnapshot(await activeRepo.join(sessionCode, pseudonym))
+      setSnapshot(await activeRepo.join(sessionCode, ''))
     } catch (cause) {
       setError(messageFor(cause, 'No pudimos entrar al taller.'))
     } finally { joinLock.current = false; setJoining(false) }
@@ -75,12 +76,9 @@ export function ParticipantPage({ sessionCode, repository }: Props) {
     } finally { submitLock.current = false; setSending(false) }
   }
 
-  if (!snapshot) return <main className="participant-shell"><section className="participant-card">
-    <p className="eyebrow">Código <span>{sessionCode}</span></p><h1 aria-label="Espacio de participante">Entrá al taller</h1>
-    <p>Tu participación es anónima. Usamos una sesión temporal para vincular tus aportes al taller. Un seudónimo es opcional y no compartas datos personales.</p>
-    <label>Seudónimo (opcional)<input value={pseudonym} maxLength={80} onChange={event => setPseudonym(event.target.value)} /></label>
-    {error && <p role="alert" className="error">{error}</p>}
-    <button className="action" disabled={joining} onClick={join}>{joining ? 'Entrando…' : 'Entrar al taller'}</button>
+  if (!snapshot) return <main className="participant-shell"><section className="participant-card participant-preparing">
+    <h1 aria-label="Espacio de participante">Preparando tu buzón…</h1>
+    {error ? <><p role="alert" className="error">{error}</p><button className="action" disabled={joining} onClick={() => void join()}>{joining ? 'Reintentando…' : 'Reintentar'}</button></> : <p role="status">Tu participación es anónima. Enseguida vas a poder compartir tu voz.</p>}
   </section></main>
 
   const approved = snapshot.contributions.filter(item => item.status === 'approved')

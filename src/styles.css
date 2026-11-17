@@ -51,6 +51,19 @@ fieldset { margin: 1rem 0; padding: 0; border: 0; }
 .error { color: #7b1721; background: #ffe9eb; }
 .review, .mural article { margin-block: .75rem; background: #f0effb; overflow-wrap: anywhere; }
 .participant-card aside { margin-top: 1.5rem; border-top-width: 1px; box-shadow: none; }
+.participant-first { align-items: stretch; }
+.participant-action { margin-top: 1rem; padding-inline: 2rem; font-size: 1.15rem; }
+.qr-card { display: grid; place-items: center; gap: 1rem; text-align: center; border-top-color: var(--yellow); }
+.qr-card img { width: min(18rem, 100%); height: auto; padding: .5rem; border: 1px solid #d9d8ed; background: white; image-rendering: pixelated; }
+.qr-card strong { font-size: 1.2rem; }
+.qr-card a { font-weight: 800; }
+.organizer-tools { margin-top: 1rem; padding-top: 1.5rem; border-top: 1px solid #d9d8ed; }
+.organizer-tools h2 { font-size: 1.1rem; }
+.organizer-tools > div { display: flex; flex-wrap: wrap; gap: .75rem; }
+.organizer-link { display: grid; gap: .2rem; min-width: 12rem; padding: .8rem 1rem; border: 1px solid #aaa4cc; border-radius: .7rem; background: white; text-decoration: none; }
+.organizer-link small { color: #554b91; font-weight: 750; text-transform: uppercase; }
+.participant-preparing { max-width: 38rem; margin: 12vh auto; text-align: center; }
+.participant-preparing h1 { max-width: none; font-size: clamp(2rem, 7vw, 3.5rem); }
 .connection { padding: .65rem 1rem; border-radius: .6rem; font-weight: 750; }
 .connection.active { color: #075e59; background: #dff7f3; }
 .connection.error { color: #7b1721; background: #ffe9eb; }

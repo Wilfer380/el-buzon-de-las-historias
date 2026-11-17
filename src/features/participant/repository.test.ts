@@ -2,6 +2,15 @@ import { describe, expect, it, vi } from 'vitest'
 import { WorkerParticipantRepository } from './repository'
 
 describe('Worker participant repository', () => {
+  it('calls browser fetch unbound so native fetch does not receive the repository as this', async () => {
+    const fetcher = function (this: unknown) {
+      if (this !== undefined) throw new TypeError('Illegal invocation')
+      return Promise.resolve(new Response(JSON.stringify({ token: 'b'.repeat(64), participant: { id: 'p1', workshopId: 'w1', pseudonym: null }, workshop: { id: 'w1', title: 'Taller', stage: 'contributions' }, contributions: [] }), { status: 201, headers: { 'Content-Type': 'application/json' } }))
+    } as typeof fetch
+    const repository = new WorkerParticipantRepository('https://api.test', fetcher)
+    await expect(repository.join('HISTORIA', '')).resolves.toMatchObject({ participant: { id: 'p1' } })
+  })
+
   it('keeps the issued bearer token in memory and sends it on reload', async () => {
     const fetcher = vi.fn()
       .mockResolvedValueOnce(new Response(JSON.stringify({ token: 'a'.repeat(64), participant: { id: 'p1', workshopId: 'w1', pseudonym: null }, workshop: { id: 'w1', title: 'Taller', stage: 'contributions' }, contributions: [] }), { status: 201, headers: { 'Content-Type': 'application/json' } }))

@@ -4,8 +4,8 @@ Accessible workshop web experience for Aprender Sin Barreras. The production MVP
 
 ## MVP scope
 
-- Participant entry at `/join/HISTORIA` (the original `/join/WORKSHOP` link is a supported alias), optional pseudonym, four contribution categories, pending moderation, own submission history, and an approved-only mural.
-- Spanish organizer moderation at `/admin/HISTORIA`. The organizer secret is exchanged server-side for a random two-hour bearer session and is never bundled into the frontend.
+- Link/QR-first participant entry at `/join/HISTORIA`: enrollment happens anonymously on load with no code, pseudonym, or credential form. The flow includes four contribution categories, pending moderation, own submission history, and an approved-only mural.
+- Spanish organizer moderation opens only from a private `/admin/HISTORIA#<capability>` link. The fragment is exchanged server-side for a random two-hour bearer session and immediately removed from browser history; it is never bundled into the frontend.
 - Spanish 16:9 projection at `/project/HISTORIA?token=...`, showing only approved content and approved aggregate counts.
 - Safe three-second polling with visible connection/error state.
 
@@ -20,7 +20,7 @@ npm run dev
 npm run worker:dev
 ```
 
-The Worker requires D1 plus `ALLOWED_ORIGIN`, `ORGANIZER_SECRET`, and `PROJECTION_TOKEN`. Do not put the organizer secret in `.env.local`, GitHub variables, source, or any `VITE_*` setting.
+The Worker requires D1 plus `ALLOWED_ORIGIN`, `ORGANIZER_SECRET`, and `PROJECTION_TOKEN`. Do not put the organizer secret in `.env.local`, GitHub variables, source, QR assets, logs, or any `VITE_*` setting. Distribute the organizer capability only in a private URL fragment; the public QR encodes only the participant URL.
 
 ## Quality checks
 
